@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quality-agent"
+version = "0.1.0"
+description = "Cross-source company data quality agent for Elasticsearch, S3, and Milvus"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "boto3>=1.34.0",
+  "elasticsearch>=8.12.0",
+  "pymilvus>=2.4.0",
+  "pyyaml>=6.0.1",
+  "python-dateutil>=2.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,63 @@
+elasticsearch:
+  host: "https://your-elastic-host:9200"
+  index: "sellers_search"
+  username: "elastic"
+  password: "changeme"
+  verify_certs: false
+  page_size: 2000
+  fields:
+    - companyId
+    - linkedinKey
+    - city
+    - country
+    - region
+    - state
+    - empCount
+    - isAcquired
+    - predictedRevenueRange.min
+    - predictedRevenueRange.max
+    - websiteStatus.isActive
+    - websiteStatus.scrapeStatus
+    - websiteStatus.statusCode
+    - children.isDuplicate
+    - parent.isDuplicate
+
+s3:
+  bucket: "company-master-data"
+  key: "exports/companies.jsonl"
+  region: "us-east-1"
+
+milvus:
+  uri: "http://milvus-host:19530"
+  token: ""
+  collection: "company_embeddings"
+  output_fields:
+    - companyId
+    - linkedinKey
+    - city
+    - country
+    - empCount
+    - isAcquired
+
+output_dir: "output"
+primary_key: "companyId"
+key_fields:
+  - linkedinKey
+  - city
+  - country
+  - empCount
+  - isAcquired
+required_fields:
+  - companyId
+  - linkedinKey
+  - city
+  - country
+  - empCount
+  - websiteStatus.isActive
+identity_group_fields:
+  - linkedinKey
+  - website
+weights:
+  completeness: 0.4
+  consistency: 0.35
+  accuracy: 0.25
