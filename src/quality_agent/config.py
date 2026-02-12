@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
-
 
 
 DEFAULT_ES_FIELDS = [
@@ -90,13 +90,23 @@ class AgentConfig:
     weights: ScoreWeights = field(default_factory=ScoreWeights)
 
 
+def _resolve_env(value: Any) -> Any:
+    if isinstance(value, str) and value.startswith("${") and value.endswith("}"):
+        env_key = value[2:-1]
+        return os.getenv(env_key, "")
+    if isinstance(value, dict):
+        return {k: _resolve_env(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [_resolve_env(v) for v in value]
+    return value
+
 
 def _read_yaml(path: Path) -> dict[str, Any]:
     import yaml
 
     with path.open("r", encoding="utf-8") as file:
-        return yaml.safe_load(file)
-
+        loaded = yaml.safe_load(file)
+    return _resolve_env(loaded)
 
 
 def load_config(path: str) -> AgentConfig:

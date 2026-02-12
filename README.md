@@ -29,6 +29,36 @@ Each company receives:
 
 The model weights are configurable in `config.example.yaml`.
 
+## Where to put Elasticsearch, S3, and Milvus credentials
+
+Use **environment variables** and reference them from `config.yaml` (same pattern as `config.example.yaml`).
+
+1. Copy and edit config:
+
+```bash
+cp config.example.yaml config.yaml
+```
+
+2. Export credentials and connection links in your shell (or CI/CD secrets):
+
+```bash
+export ELASTIC_HOST="https://your-elastic-host:9200"
+export ELASTIC_USERNAME="elastic"
+export ELASTIC_PASSWORD="your-password"
+
+export AWS_REGION="us-east-1"
+export S3_BUCKET="company-master-data"
+export S3_KEY="exports/companies.jsonl"
+
+export MILVUS_URI="http://milvus-host:19530"
+export MILVUS_TOKEN=""
+export MILVUS_COLLECTION="company_embeddings"
+```
+
+3. Run the agent; placeholders like `${ELASTIC_HOST}` are auto-resolved from env variables.
+
+> Do not commit real credentials in `config.yaml`.
+
 ## Setup
 
 ```bash
@@ -38,14 +68,6 @@ pip install -e .[dev]
 ```
 
 ## Run
-
-1. Copy and edit config:
-
-```bash
-cp config.example.yaml config.yaml
-```
-
-2. Execute agent:
 
 ```bash
 python -m quality_agent.cli --config config.yaml

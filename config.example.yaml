@@ -1,8 +1,8 @@
 elasticsearch:
-  host: "https://your-elastic-host:9200"
+  host: "${ELASTIC_HOST}" # e.g. https://your-elastic-host:9200
   index: "sellers_search"
-  username: "elastic"
-  password: "changeme"
+  username: "${ELASTIC_USERNAME}"
+  password: "${ELASTIC_PASSWORD}"
   verify_certs: false
   page_size: 2000
   fields:
@@ -23,14 +23,14 @@ elasticsearch:
     - parent.isDuplicate
 
 s3:
-  bucket: "company-master-data"
-  key: "exports/companies.jsonl"
-  region: "us-east-1"
+  bucket: "${S3_BUCKET}"
+  key: "${S3_KEY}" # e.g. exports/companies.jsonl
+  region: "${AWS_REGION}"
 
 milvus:
-  uri: "http://milvus-host:19530"
-  token: ""
-  collection: "company_embeddings"
+  uri: "${MILVUS_URI}" # e.g. http://milvus-host:19530
+  token: "${MILVUS_TOKEN}"
+  collection: "${MILVUS_COLLECTION}"
   output_fields:
     - companyId
     - linkedinKey
