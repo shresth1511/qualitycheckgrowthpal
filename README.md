@@ -59,6 +59,17 @@ export MILVUS_COLLECTION="company_embeddings"
 
 > Do not commit real credentials in `config.yaml`.
 
+
+## Read-only guarantee
+
+The agent is intentionally **read-only** against Elasticsearch, S3, and Milvus:
+
+- Elasticsearch: `search`, `scroll`, `clear_scroll` only
+- S3: `get_object` only
+- Milvus: `load` and `query` only
+
+No insert/update/delete/upsert/bulk operations are implemented in this codebase.
+
 ## Setup
 
 ```bash

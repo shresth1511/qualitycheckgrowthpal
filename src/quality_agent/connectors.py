@@ -13,6 +13,12 @@ from .config import ElasticsearchConfig, MilvusConfig, S3Config
 
 
 class ElasticsearchConnector:
+    """Read-only Elasticsearch connector.
+
+    This connector intentionally uses only search/scroll APIs and never performs
+    write operations such as index/update/delete/bulk.
+    """
+
     def __init__(self, cfg: ElasticsearchConfig) -> None:
         self.client = Elasticsearch(
             hosts=[cfg.host],
@@ -49,6 +55,11 @@ class ElasticsearchConnector:
 
 
 class S3Connector:
+    """Read-only S3 connector.
+
+    This connector only reads an object via get_object and parses it in memory.
+    """
+
     def __init__(self, cfg: S3Config) -> None:
         self.client = boto3.client("s3", region_name=cfg.region)
         self.cfg = cfg
@@ -93,6 +104,12 @@ class S3Connector:
 
 
 class MilvusConnector:
+    """Read-only Milvus connector.
+
+    This connector uses load/query to retrieve metadata and does not insert,
+    upsert, delete, or mutate collection data.
+    """
+
     def __init__(self, cfg: MilvusConfig) -> None:
         connections.connect(uri=cfg.uri, token=cfg.token)
         self.collection = Collection(name=cfg.collection, consistency_level=cfg.consistency_level)
